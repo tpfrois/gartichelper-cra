@@ -13,7 +13,7 @@ const CategoryButton: React.FC<CategoryButtonProps> = ({
   category,
 }: CategoryButtonProps) => {
   return (
-    <Button to={`/${category}`} id={category}>
+    <Button to={`/categories/${category}`} id={category}>
       <img src={icon} alt={category} />
       <p>{category}</p>
     </Button>
