@@ -8,8 +8,7 @@ import CharactersTable from '../../../components/CharactersTable';
 import { FilterContainer } from './styles';
 
 interface CharacterFilterObject {
-  characterInputName: string;
-  characterPositionInputName: string;
+  id: string;
   letter: string;
   position: string;
 }

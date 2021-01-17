@@ -1,10 +1,10 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useCallback } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 import { Table } from './styles';
 
 interface CharacterFilterObject {
-  characterInputName: string;
-  characterPositionInputName: string;
+  id: string;
   letter: string;
   position: string;
 }
@@ -21,53 +21,37 @@ const CharactersTable: React.FC<CharactersTableProps> = ({
   filters,
   setFilters,
 }: CharactersTableProps) => {
-  function handleCharacterFilter(
-    event:
-      | ChangeEvent<HTMLInputElement>
-      | React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ): void {
-    const targetName = event.currentTarget.name;
-    const targetValue = event.currentTarget.value;
-
-    if (targetName === 'addButton') {
-      const charactersIndex = filters.characters.length;
-      const newCharacter = {
-        characterInputName: `text-${charactersIndex}`,
-        characterPositionInputName: `number-${charactersIndex}`,
-        letter: '',
-        position: '',
-      };
-      const newFilters = { ...filters };
-      newFilters.characters.push(newCharacter);
-      setFilters(newFilters);
-    }
-
-    if (targetName === 'cleanButton') {
-      setFilters({
-        ...filters,
-        characters: [],
-      });
-    }
-
-    if (
-      event.currentTarget.type === 'text' ||
-      event.currentTarget.type === 'number'
-    ) {
+  const handleCharactersFilterChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>, id: string): void => {
       const newCharacters = filters.characters.map(character => {
-        if (character.characterInputName === targetName) {
-          return {
-            ...character,
-            letter: targetValue,
-          };
-        }
-        if (character.characterPositionInputName === targetName) {
-          return { ...character, position: targetValue };
-        }
+        if (character.id === id)
+          // eslint-disable-next-line no-param-reassign
+          character[event.currentTarget.name] = event.currentTarget.value;
+
         return character;
       });
+
       setFilters({ ...filters, characters: newCharacters });
-    }
-  }
+    },
+    [filters, setFilters],
+  );
+
+  const handleAddCharacter = useCallback(() => {
+    setFilters({
+      ...filters,
+      characters: [
+        ...filters.characters,
+        { id: uuidv4(), letter: '', position: '' },
+      ],
+    });
+  }, [filters, setFilters]);
+
+  const handleCleanCharacters = useCallback(() => {
+    setFilters({
+      ...filters,
+      characters: [{ id: uuidv4(), letter: '', position: '' }],
+    });
+  }, [filters, setFilters]);
 
   return (
     <Table>
@@ -76,19 +60,20 @@ const CharactersTable: React.FC<CharactersTableProps> = ({
           <th colSpan={2}>Letras</th>
         </tr>
         <tr>
-          <th>Letras</th>
+          <th>Letra</th>
           <th>Posição</th>
         </tr>
       </thead>
       <tbody>
-        {filters.characters.map((character, index) => (
-          <tr key={character.characterInputName}>
+        {filters.characters.map(character => (
+          <tr key={character.id}>
             <td>
               <input
                 type="text"
                 placeholder="..."
-                name={`text-${index}`}
-                onChange={handleCharacterFilter}
+                name="letter"
+                value={character.letter}
+                onChange={e => handleCharactersFilterChange(e, character.id)}
               />
             </td>
             <td>
@@ -96,8 +81,9 @@ const CharactersTable: React.FC<CharactersTableProps> = ({
                 type="number"
                 min="1"
                 placeholder="..."
-                name={`number-${index}`}
-                onChange={handleCharacterFilter}
+                name="position"
+                value={character.position}
+                onChange={e => handleCharactersFilterChange(e, character.id)}
               />
             </td>
           </tr>
@@ -109,7 +95,7 @@ const CharactersTable: React.FC<CharactersTableProps> = ({
             <button
               type="button"
               id="cleanButton"
-              onClick={handleCharacterFilter}
+              onClick={handleCleanCharacters}
               name="cleanButton"
             >
               LIMPAR
@@ -119,7 +105,7 @@ const CharactersTable: React.FC<CharactersTableProps> = ({
             <button
               type="button"
               id="addButton"
-              onClick={handleCharacterFilter}
+              onClick={handleAddCharacter}
               name="addButton"
             >
               ADICIONAR

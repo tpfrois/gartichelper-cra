@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouteMatch } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
 import GlobalStyle from '../../styles/global';
 
@@ -27,8 +28,7 @@ const Dashboard: React.FC = () => {
     lengthFilter: '',
     characters: [
       {
-        characterInputName: 'text-0',
-        characterPositionInputName: 'number-0',
+        id: uuidv4(),
         letter: '',
         position: '',
       },
