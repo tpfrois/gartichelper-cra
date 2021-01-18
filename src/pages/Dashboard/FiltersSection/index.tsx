@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect } from 'react';
+import React, { ChangeEvent, useCallback, useEffect } from 'react';
 
 import Logo from '../../../components/Logo';
 import CategorySelect from '../../../components/CategorySelect';
@@ -13,13 +13,15 @@ interface CharacterFilterObject {
   position: string;
 }
 
+interface Filters {
+  lettersFilter: string;
+  lengthFilter: string;
+  characters: CharacterFilterObject[];
+}
+
 interface FilterProps {
   categorie: string;
-  filters: {
-    lettersFilter: string;
-    lengthFilter: string;
-    characters: CharacterFilterObject[];
-  };
+  filters: Filters;
   setFilters: React.Dispatch<React.SetStateAction<any>>;
   words: string[];
   setFilteredWords: React.Dispatch<React.SetStateAction<string[]>>;
@@ -32,65 +34,56 @@ const FilterSection: React.FC<FilterProps> = ({
   words,
   setFilteredWords,
 }: FilterProps) => {
-  function handleFilters(event: ChangeEvent<HTMLInputElement>): void {
-    setFilters({ ...filters, [event.target.name]: event.target.value });
-  }
+  const handleFilters = useCallback(
+    (event: ChangeEvent<HTMLInputElement>): void => {
+      setFilters({ ...filters, [event.target.name]: event.target.value });
+    },
+    [filters, setFilters],
+  );
 
-  useEffect(() => {
-    // Check if there is any filter
-    const hasCharacterFilter =
-      filters.characters.length !== 0 &&
-      (filters.characters[0].letter !== '' ||
-        filters.characters[0].position !== '');
-    if (
-      !filters.lengthFilter &&
-      !filters.lettersFilter &&
-      !hasCharacterFilter
-    ) {
-      setFilteredWords(words);
-      return;
-    }
-
-    // Identify which filters are applied
-    const length = Number(filters.lengthFilter);
-    if (filters.lengthFilter && filters.lettersFilter) {
-      const filtered = words.filter(
-        word =>
-          word.length === length &&
-          word.toLowerCase().includes(filters.lettersFilter.toLowerCase()),
-      );
-      setFilteredWords(filtered);
-    } else if (filters.lettersFilter) {
-      const filtered = words.filter(word =>
+  const filtersFunctions = {
+    lettersFilter: (wordsArray: string[]) =>
+      wordsArray.filter(word =>
         word.toLowerCase().includes(filters.lettersFilter.toLowerCase()),
-      );
-      setFilteredWords(filtered);
-    } else if (hasCharacterFilter && filters.lengthFilter) {
-      const filtered = words.filter(
-        word =>
-          word.length === length &&
-          filters.characters.every(({ position, letter }) => {
-            // If the character position isn't specified
-            if (Number(position) <= 0)
-              return word.includes(letter.toLowerCase());
-            return word.charAt(Number(position) - 1) === letter.toLowerCase();
-          }),
-      );
-      setFilteredWords(filtered);
-    } else if (hasCharacterFilter) {
-      const filtered = words.filter(word =>
+      ),
+
+    lengthFilter: (wordsArray: string[]) =>
+      wordsArray.filter(word => word.length === Number(filters.lengthFilter)),
+
+    characters: (wordsArray: string[]) =>
+      wordsArray.filter(word =>
         filters.characters.every(({ position, letter }) => {
           // If the character position isn't specified
           if (Number(position) <= 0) return word.includes(letter.toLowerCase());
           return word.charAt(Number(position) - 1) === letter.toLowerCase();
         }),
-      );
-      setFilteredWords(filtered);
-    } else if (filters.lengthFilter) {
-      const filtered = words.filter(word => word.length === length);
-      setFilteredWords(filtered);
-    }
-  }, [filters, setFilteredWords, setFilters, words]);
+      ),
+  };
+
+  const getAppliedFilters = useCallback((filtersObject: Filters): string[] => {
+    const objectProperties = Object.entries(filtersObject);
+    const activeFilters = objectProperties.filter(filter => {
+      const value = filter[1];
+      if (typeof value === 'object') {
+        // Checks if any character input is filled
+        return value.some(character => character.letter !== '');
+      }
+      return value !== '';
+    });
+    const activeFiltersNames = activeFilters.map(filter => filter[0]);
+    return activeFiltersNames;
+  }, []);
+
+  useEffect(() => {
+    const appliedFilters = getAppliedFilters(filters);
+
+    const filteredWords = appliedFilters.reduce(
+      (currentFilteredWords, filter) =>
+        filtersFunctions[filter](currentFilteredWords),
+      words,
+    );
+    setFilteredWords(filteredWords);
+  }, [filters, setFilteredWords, words, getAppliedFilters]);
 
   return (
     <FilterContainer>
