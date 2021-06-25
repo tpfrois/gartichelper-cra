@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback } from 'react';
+import React, { ChangeEvent } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Table } from './styles';
@@ -21,22 +21,22 @@ const CharactersTable: React.FC<CharactersTableProps> = ({
   filters,
   setFilters,
 }: CharactersTableProps) => {
-  const handleCharactersFilterChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>, id: string): void => {
-      const newCharacters = filters.characters.map(character => {
-        if (character.id === id)
-          // eslint-disable-next-line no-param-reassign
-          character[event.currentTarget.name] = event.currentTarget.value;
+  const handleCharactersFilterChange = (
+    event: ChangeEvent<HTMLInputElement>,
+    id: string,
+  ): void => {
+    const newCharacters = filters.characters.map(character => {
+      if (character.id === id)
+        // eslint-disable-next-line no-param-reassign
+        character[event.currentTarget.name] = event.currentTarget.value;
 
-        return character;
-      });
+      return character;
+    });
 
-      setFilters({ ...filters, characters: newCharacters });
-    },
-    [filters, setFilters],
-  );
+    setFilters({ ...filters, characters: newCharacters });
+  };
 
-  const handleAddCharacter = useCallback(() => {
+  const handleAddCharacter = (): void => {
     setFilters({
       ...filters,
       characters: [
@@ -44,14 +44,14 @@ const CharactersTable: React.FC<CharactersTableProps> = ({
         { id: uuidv4(), letter: '', position: '' },
       ],
     });
-  }, [filters, setFilters]);
+  };
 
-  const handleCleanCharacters = useCallback(() => {
+  const handleCleanCharacters = (): void => {
     setFilters({
       ...filters,
       characters: [{ id: uuidv4(), letter: '', position: '' }],
     });
-  }, [filters, setFilters]);
+  };
 
   return (
     <Table>
