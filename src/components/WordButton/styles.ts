@@ -1,10 +1,6 @@
 import styled from 'styled-components';
 
-export default styled.a`
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-
+export default styled.li`
   padding: 4px;
   margin: 5px 20px 10px 0px;
 
