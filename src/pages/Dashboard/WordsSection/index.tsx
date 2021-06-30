@@ -3,6 +3,7 @@ import React, { memo } from 'react';
 import { Container, WordsContainer } from './styles';
 
 import WordButton from '../../../components/WordButton';
+import NavBar from '../../../components/NavBar';
 
 interface WordSectionProps {
   words: string[];
@@ -13,6 +14,7 @@ const WordsSection: React.FC<WordSectionProps> = ({
 }: WordSectionProps) => {
   return (
     <Container>
+      <NavBar />
       <p>
         <i className="fas fa-info-circle" />
         Clique na palavra para copiar, elas estão ordenadas em ordem alfabética!
