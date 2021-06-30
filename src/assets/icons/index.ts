@@ -2,6 +2,6 @@
 export default {
   alimentos: require('./alimentos.svg'),
   animais: require('./animais.svg'),
-  desenhoAnimado: require('./desenhoAnimado.svg'),
+  desenhoAnimado: require('./desenhos.svg'),
   geral: require('./geral.svg'),
 };

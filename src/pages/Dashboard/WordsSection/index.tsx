@@ -1,8 +1,9 @@
 import React, { memo } from 'react';
 
-import { WordsContainer } from './styles';
+import { Container, WordsContainer } from './styles';
 
 import WordButton from '../../../components/WordButton';
+import NavBar from '../../../components/NavBar';
 
 interface WordSectionProps {
   words: string[];
@@ -12,7 +13,8 @@ const WordsSection: React.FC<WordSectionProps> = ({
   words,
 }: WordSectionProps) => {
   return (
-    <main>
+    <Container>
+      <NavBar />
       <p>
         <i className="fas fa-info-circle" />
         Clique na palavra para copiar, elas estão ordenadas em ordem alfabética!
@@ -26,7 +28,7 @@ const WordsSection: React.FC<WordSectionProps> = ({
           <WordButton key={`${word}`} word={word} />
         ))}
       </WordsContainer>
-    </main>
+    </Container>
   );
 };
 

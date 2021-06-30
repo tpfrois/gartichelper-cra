@@ -5,10 +5,11 @@ export const StyledBody = styled.div`
 
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
   justify-content: space-around;
 
   @media only screen and (max-width: 768px) {
+    align-items: center;
+
     flex-direction: column;
   }
 
@@ -54,7 +55,6 @@ export const CategoryContainer = styled.div`
 
   @media only screen and (max-width: 640px) {
     grid-template-columns: auto;
-
     #Geral {
       grid-column: auto;
 

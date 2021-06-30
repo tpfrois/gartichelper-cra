@@ -1,9 +1,11 @@
 import React from 'react';
-import background from '../../assets/images/home-background.png';
 
 import GlobalStyle from '../../styles/global';
 import { Container, CardContainer, Card } from './styles';
 
+import NavBar from '../../components/NavBar';
+
+import background from '../../assets/images/home-background.png';
 import FiltroCategoria from '../../assets/images/filtro-categoria.png';
 import FiltroNumero from '../../assets/images/filtro-numero.png';
 import FiltroLetras from '../../assets/images/filtro-letras.png';
@@ -17,6 +19,7 @@ const Help: React.FC = () => {
     <>
       <GlobalStyle homePage backgroundImage={background} />
       <Container>
+        <NavBar />
         <h1>Como usar o Gartic Helper?</h1>
         <CardContainer>
           <Card>
@@ -36,8 +39,10 @@ const Help: React.FC = () => {
             <img src={DicaNumeros} className="dica" alt="Dica do Gartic" />
             <img src={FiltroNumero} alt="Filtro de Quantidade de Letras" />
             <p>
-              Insira a quantidade de letras da palvra{' '}
-              <strong>(contando com hífens e espaços)</strong>. Geralmente é
+              Insira a quantidade de letras da palvra
+              {' '}
+              <strong>(contando com hífens e espaços)</strong>
+              . Geralmente é
               utilizada sempre que uma dica é dada no seu jogo.
             </p>
           </Card>
@@ -47,7 +52,9 @@ const Help: React.FC = () => {
             <img src={DicaLetras} className="dica" alt="Dica do Gartic" />
             <img src={FiltroLetras} alt="Filtro de Quantidade de Letras" />
             <p>
-              No exemplo acima, temos a sequência <strong>TA</strong>, então
+              No exemplo acima, temos a sequência
+              {' '}
+              <strong>TA</strong>, então
               podemos coloca-la no filtro e combinar com o de número de letras e
               caracteres para achar facilmente a resposta.
             </p>

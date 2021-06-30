@@ -10,3 +10,15 @@ export const WordsContainer = styled.div`
     }
   }
 `;
+
+export const Container = styled.main`
+  header {
+    justify-content: flex-start;
+  }
+
+  p {
+    color: black !important;
+    font-size: 16px !important;
+    font-weight: 400 !important;
+  }
+`;
