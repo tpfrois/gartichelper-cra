@@ -23,6 +23,7 @@ const WordsSection: React.FC<WordSectionProps> = ({
         Palavras Encontradas:
         {words.length}
       </p>
+
       <WordsContainer>
         {words.map(word => (
           <WordButton key={`${word}`} word={word} />

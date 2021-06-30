@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useRouteMatch } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
 
 import GlobalStyle from '../../styles/global';
 
@@ -23,18 +22,6 @@ const Dashboard: React.FC = () => {
   const [words, setWords] = useState<string[]>([]);
   const [filteredWords, setFilteredWords] = useState<string[]>([]);
 
-  const [filters, setFilters] = useState({
-    lettersFilter: '',
-    lengthFilter: '',
-    characters: [
-      {
-        id: uuidv4(),
-        letter: '',
-        position: '',
-      },
-    ],
-  });
-
   useEffect(() => {
     const categoryData = wordsRepository.find(
       categorie =>
@@ -55,8 +42,6 @@ const Dashboard: React.FC = () => {
       <Container>
         <FiltersSection
           categorie={currentCategory}
-          filters={filters}
-          setFilters={setFilters}
           words={words}
           setFilteredWords={setFilteredWords}
         />
