@@ -57,7 +57,7 @@ const CharactersTable: React.FC<CharactersTableProps> = ({
     <Table>
       <thead>
         <tr>
-          <th colSpan={2}>Letras</th>
+          <th colSpan={2}>Caracteres</th>
         </tr>
         <tr>
           <th>Letra</th>
